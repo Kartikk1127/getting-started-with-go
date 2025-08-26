@@ -1,14 +1,23 @@
 package greetings
 
-import "testing"
+import (
+	"regexp"
+	"testing"
+)
 
 func TestHello(t *testing.T) {
 	name := "Kartikey"
-	message := "Hi, Kartikey. Welcome!"
-	got := Hello(name)
+	want := regexp.MustCompile(`\b` + name + `\b`)
+	msg, err := Hello(name)
 
-	if got != message {
-		t.Errorf("Hello(%q) = %q, want %q", name, message, got)
+	if !want.MatchString(msg) {
+		t.Errorf(`Hello("Kartikey" = %q, %v, want match for %#q, nil`, msg, err, want)
 	}
-	t.Log("Testing finished successfully")
+}
+
+func TestHelloEmpty(t *testing.T) {
+	msg, err := Hello("")
+	if msg != "" || err == nil {
+		t.Errorf(`Hello("") = %q, %v, want "", error`, msg, err)
+	}
 }
