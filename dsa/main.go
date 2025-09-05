@@ -34,3 +34,34 @@ func searchInsert(nums []int, target int) int {
 	}
 	return high + 1
 }
+
+func getFloorAndCeil(nums []int, x int) []int {
+	if x < nums[0] {
+		return []int{-1, nums[0]}
+	}
+	if x > nums[len(nums)-1] {
+		return []int{nums[len(nums)-1], -1}
+	}
+	var low = 0
+	var high = len(nums) - 1
+	var result = make([]int, 2)
+
+	for low <= high {
+		mid := low + (high-low)/2
+		if nums[mid] == x {
+			return []int{nums[mid], nums[mid]}
+		} else if nums[mid] < x {
+			low = mid + 1
+		} else {
+			high = mid - 1
+		}
+	}
+	if nums[high] > x {
+		result[0] = nums[high-1]
+		result[1] = nums[high]
+	} else {
+		result[0] = nums[high]
+		result[1] = nums[high+1]
+	}
+	return result
+}
